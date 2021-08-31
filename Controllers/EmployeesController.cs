@@ -26,6 +26,7 @@ namespace SamplePOC.Controllers
         {
             return Ok(_employee.GetEmployees());
         }
+        //Get Employee details based on ID
         [HttpGet]
         [Route("api/[controller]/{id}")]
         // public ActionResult GetEmployee(Guid id)
