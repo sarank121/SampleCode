@@ -1,3 +1,4 @@
+using Couchbase.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,15 +30,17 @@ namespace SamplePOC
         {
 
             services.AddControllers();
-            services.AddSingleton<IEmployeeData, MockEmployeeData>();
+            services.AddTransient<IEmployeeData, EmployeeDataRepo>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamplePOC", Version = "v1" });
             });
+            //  services.AddCouchbase(Configuration.GetSection("Couchbase"));
+            services.AddCouchbase(Configuration.GetSection("Couchbase"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime appLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -55,6 +58,10 @@ namespace SamplePOC
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            appLifetime.ApplicationStopped.Register(() =>
+            {
+                app.ApplicationServices.GetRequiredService<ICouchbaseLifetimeService>().Close();
             });
         }
     }

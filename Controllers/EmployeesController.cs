@@ -19,60 +19,67 @@ namespace SamplePOC.Controllers
         {
             _employee = employee;
         }
-        //Get Employee details
+       
+        /// <summary>
+        /// Get Employee details with email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("api/[controller]")]
-        public ActionResult GetEmployee()
+        [Route("api/[controller]/{email}")]
+        public ActionResult GetEmployee(string email)
         {
-            return Ok(_employee.GetEmployees());
-        }
-        //Get Employee details based on ID
-        [HttpGet]
-        [Route("api/[controller]/{id}")]
-        // public ActionResult GetEmployee(Guid id)
-        public ActionResult GetEmployee(int id)
-        {
-            var Employee = _employee.GetEmployee(id);
+            var Employee = _employee.GetEmployee(email);
             if (Employee != null)
             {
                 return Ok(Employee);
             }
-            return NotFound("Emplyee with id :{Id} was not found");
+            return NotFound();
+          //  return Ok(_employee.GetEmployee(email));
         }
+        /// <summary>
+        /// Get all Employee Details
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/[controller]")]
+        public ActionResult GetEmployee()
+        {
+            var Employee = _employee.GetAllEmployees();
+            if (Employee != null)
+            {
+                return Ok(Employee);
+            }
+            return NotFound();
+        }
+        /// <summary>
+        /// Post Employee Details
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/[controller]")]
         public IActionResult GetEmployee(Employee employee)
         {
-            _employee.AddEmployee(employee);
-            //return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + employee.EmployeeId, employee);
-            return Ok("Employee Created");
+            var status =_employee.AddEmployee(employee);
+            return Ok(status);
         }
+
         [HttpDelete]
-        [Route("api/[controller]/{id}")]
+        [Route("api/[controller]/{email}")]
         //  public IActionResult DeleteEmployee(Guid Id)
-        public IActionResult DeleteEmployee(int Id)
+        public IActionResult DeleteEmployee(string email)
         {
-            var employee = _employee.GetEmployee(Id);
-            if(employee != null)
-            {
-                _employee.DeleteEmployee(employee);
-                return Ok("Employee Deleted Successfully");
-            }
-            return NotFound();
+            var employee = _employee.DeleteEmployee(email);
+            return Ok(employee);
         }
         [HttpPatch]
-        [Route("api/[controller]/{id}")]
+        [Route("api/[controller]/{email}")]
         // public IActionResult EditEmployee(Guid Id,Employee employee)
-        public IActionResult EditEmployee(int Id, Employee employee)
+        public IActionResult EditEmployee(string email, string firstName)
         {
-            var exemployee = _employee.GetEmployee(Id);
-            if (exemployee != null)
-            {
-                employee.EmployeeId = exemployee.EmployeeId;
-                _employee.EditEmployee(employee);
-                return Ok("Employee Updated Successfully");
-            }
-            return NotFound();
+            var status = _employee.EditEmployee(email, firstName);
+            return Ok(status);
         }
     }
     
