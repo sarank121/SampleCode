@@ -26,49 +26,80 @@ namespace SamplePOC.EmployeeData
 
         public string AddEmployee(Employee employee)
         {
-            var key = Guid.NewGuid().ToString();
-            _bucket.Insert(key, employee);
-            var jsondata = JsonConvert.SerializeObject(employee);
-            return "Inserted document: " + jsondata;
+            try
+            {
+                var key = Guid.NewGuid().ToString();
+                var data = _bucket.Insert(key, employee);
+                var jsondata = JsonConvert.SerializeObject(employee);
+                return "Inserted Successfully";
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
         }
         public string DeleteEmployee(string email)
         {
+            try { 
             var n1ql = "Delete FROM Test d WHERE d.email = $email";
             var query = QueryRequest.Create(n1ql);
             query.AddNamedParameter("$email", email);
             _bucket.Query<Employee>(query);
             var getEmployee = GetAllEmployees();
             var jsondata = JsonConvert.SerializeObject(getEmployee);
-            return "Deleted Successfully: " + jsondata;
+            return "Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         public string EditEmployee(string email, string firstName)
         {
-            
-            var n1ql = "Update Test set firstName =$name where email = $email";
-            var query = QueryRequest.Create(n1ql);
-            query.AddNamedParameter("$email", email);
-            query.AddNamedParameter("$name", firstName);
-            _bucket.Query<Employee>(query);
-            var getEmployee = GetAllEmployees();
-            var jsondata = JsonConvert.SerializeObject(getEmployee);
-            return "Updated Successfully" + jsondata;
+            try
+            {
+                var n1ql = "Update Test set firstName =$name where email = $email";
+                var query = QueryRequest.Create(n1ql);
+                query.AddNamedParameter("$email", email);
+                query.AddNamedParameter("$name", firstName);
+                _bucket.Query<Employee>(query);
+                var getEmployee = GetAllEmployees();
+                var jsondata = JsonConvert.SerializeObject(getEmployee);
+                return "Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
         
-        public List<Employee> GetEmployee(string email)
+        public Employee GetEmployee(string email)
         {
+            try { 
             var n1ql = "SELECT d.* FROM Test d WHERE d.email = $email";
             var query = QueryRequest.Create(n1ql);
             query.AddNamedParameter("$email", email);
             var result = _bucket.Query<Employee>(query);
-            return result.Rows;
+            return (Employee)result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         public List<Employee> GetAllEmployees()
         {
+            try { 
             var n1ql = "SELECT d.* FROM Test d";
             var query = QueryRequest.Create(n1ql);
             var result = _bucket.Query<Employee>(query);
             return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
    

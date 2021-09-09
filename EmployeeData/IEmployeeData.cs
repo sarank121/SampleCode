@@ -9,7 +9,8 @@ namespace SamplePOC.EmployeeData
 {
     public interface IEmployeeData 
     {
-        List<Employee> GetEmployee(string email);
+        Employee GetEmployee(string email);
+      //  List<Employee> GetEmployee(string email);
         List<Employee> GetAllEmployees();
         string AddEmployee(Employee employee);
         string EditEmployee(string email, string firstName);

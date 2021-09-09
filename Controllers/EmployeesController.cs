@@ -62,7 +62,11 @@ namespace SamplePOC.Controllers
         public IActionResult GetEmployee(Employee employee)
         {
             var status =_employee.AddEmployee(employee);
-            return Ok(status);
+            if (status != null && status !="" && status != String.Empty)
+            {
+                return Ok(status);
+            }
+            return NotFound();
         }
 
         [HttpDelete]
@@ -70,8 +74,13 @@ namespace SamplePOC.Controllers
         //  public IActionResult DeleteEmployee(Guid Id)
         public IActionResult DeleteEmployee(string email)
         {
-            var employee = _employee.DeleteEmployee(email);
-            return Ok(employee);
+            if (email != null && email != "" && email != String.Empty)
+            {
+                var employee = _employee.DeleteEmployee(email);
+                if (employee != null && employee != "" && employee != String.Empty)
+                    return Ok(employee);
+            }
+            return NotFound();
         }
         [HttpPatch]
         [Route("api/[controller]/{email}")]
@@ -79,7 +88,9 @@ namespace SamplePOC.Controllers
         public IActionResult EditEmployee(string email, string firstName)
         {
             var status = _employee.EditEmployee(email, firstName);
-            return Ok(status);
+            if (status != null && status != "" && status != String.Empty)
+                return Ok(status);
+            return NotFound();
         }
     }
     
