@@ -21,7 +21,7 @@ namespace SamplePOC.Controllers
         }
        
         /// <summary>
-        /// Get Employee details with email
+        /// Get Employee details based on email 
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>

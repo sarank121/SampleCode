@@ -11,7 +11,7 @@ namespace SamplePOC.Models
         public static string firstName = "John";
         public static List<Employee> employee = null;
         public static Employee employeedata = null;
-        public static string noemployee = null;
+        public static string noemployee = null; //WithoutEmployee
 
     }
 }
