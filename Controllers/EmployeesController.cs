@@ -45,7 +45,7 @@ namespace SamplePOC.Controllers
         [Route("api/[controller]")]
         public ActionResult GetEmployee()
         {
-            var Employee = _employee.GetAllEmployees();
+            var Employee = _employee.GetAllEmployees();//Get employee details
             if (Employee != null)
             {
                 return Ok(Employee);
